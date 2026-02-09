@@ -3,7 +3,6 @@ import { useAuth } from "bknd/client";
 import "bknd/dist/styles.css";
 import { Admin } from "bknd/ui";
 
-
 export const Route = createFileRoute("/admin/$")({
   ssr: false,
   component: RouteComponent,
@@ -18,7 +17,7 @@ function RouteComponent() {
         basepath: "/admin",
         logo_return_path: "/../",
       }}
-      baseUrl="http://localhost:3000"
+      baseUrl={import.meta.env.APP_URL}
     />
   );
 }

@@ -37,7 +37,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ClientProvider verbose baseUrl="http://localhost:3000">
+        <ClientProvider verbose baseUrl={import.meta.env.APP_URL}>
           {children}
         </ClientProvider>
         <TanStackDevtools
