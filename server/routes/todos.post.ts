@@ -1,10 +1,9 @@
-import { getApi } from "../utils/bknd";
-
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { action, data } = body;
-  const api = await getApi({});
+  const { data, action } = body;
 
+  const api = await getApi({});
+  
   switch (action) {
     case 'get':
       const limit = 5;
@@ -21,6 +20,7 @@ export default defineEventHandler(async (event) => {
       return await api.data.updateOne("todos", data.id, { done: !data.done });
 
     default:
-      throw createError({ statusCode: 400, statusMessage: "Invalid Action" });
+      return { path: action };
   }
+
 });
