@@ -52,4 +52,8 @@ export default {
       }),
     },
   },
+  adminOptions: {
+    adminBasepath: "/admin",
+    assetsPath: "/admin/",
+  },
 } satisfies RuntimeBkndConfig;
