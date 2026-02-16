@@ -1,0 +1,24 @@
+{
+  "name": "nuxbknd",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "prebuild": "bknd copy-assets --out public/admin",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@hono/vite-dev-server": "^0.25.0",
+    "@nuxtjs/google-fonts": "3.2.0",
+    "@nuxtjs/tailwindcss": "6.14.0",
+    "@types/node": "^25.2.3",
+    "bknd": "^0.20.0",
+    "hono": "^4.11.9",
+    "nuxt": "^4.3.1",
+    "vue": "^3.5.28",
+    "vue-router": "^4.6.4"
+  }
+}

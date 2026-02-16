@@ -1,0 +1,55 @@
+import { em, entity, text, boolean, libsql } from "bknd";
+import { RuntimeBkndConfig } from "bknd/adapter";
+import { registerLocalMediaAdapter } from "bknd/adapter/node";
+
+const local = registerLocalMediaAdapter();
+
+const schema = em({
+  todos: entity("todos", {
+    title: text(),
+    done: boolean(),
+  }),
+});
+
+// register your schema to get automatic type completion
+type Database = (typeof schema)["DB"];
+declare module "bknd" {
+  interface DB extends Database {}
+}
+
+export default {
+  connection: libsql({
+    url: process.env.DATABASE_URL || "http://localhost:8080",
+  }),
+  options: {
+    // the seed option is only executed if the database was empty
+    seed: async (ctx) => {
+      // create some entries
+      await ctx.em.mutator("todos").insertMany([
+        { title: "Learn bknd", done: true },
+        { title: "Build something cool", done: false },
+      ]);
+
+      // and create a user
+      await ctx.app.module.auth.createUser({
+        email: "test@bknd.io",
+        password: "12345678",
+      });
+    },
+  },
+  config: {
+    data: schema.toJSON(),
+    auth: {
+      enabled: true,
+      jwt: {
+        secret: "random_gibberish_please_change_this",
+      },
+    },
+    media: {
+      enabled: true,
+      adapter: local({
+        path: "./public/uploads",
+      }),
+    },
+  },
+} satisfies RuntimeBkndConfig;
