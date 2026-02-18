@@ -1,0 +1,28 @@
+{
+  "name": "example-basic",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "prebuild": "bknd copy-assets --out public/admin",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "version": "vinxi version"
+  },
+  "dependencies": {
+    "@solidjs/meta": "^0.29.4",
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.2.1",
+    "@types/node": "^25.2.3",
+    "bknd": "^0.20.0",
+    "solid-js": "^1.9.11",
+    "tailwind-merge": "^3.4.1",
+    "vinxi": "^0.5.7"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}
