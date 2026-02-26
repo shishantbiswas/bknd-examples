@@ -14,11 +14,11 @@ const pathname = computed(() => route.path)
       {{ pathname === '/' ? 'User' : 'Home' }}
     </NuxtLink>
 
-    <!-- a tag is required to hit the middleware in place  -->
-    <a class="flex items-center gap-2 hover:underline hover:underline-offset-4" href="/admin">
+    <!-- external is required to hit the middleware in place  -->
+    <NuxtLink external class="flex items-center gap-2 hover:underline hover:underline-offset-4" href="/admin">
       <img aria-hidden src="/window.svg" alt="Window icon" width="16" height="16" />
       Admin
-    </a>
+    </NuxtLink>
 
     <a class="flex items-center gap-2 hover:underline hover:underline-offset-4" href="https://bknd.io" target="_blank"
       rel="noopener noreferrer">
