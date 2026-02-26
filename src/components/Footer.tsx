@@ -18,10 +18,10 @@ export function Footer() {
         />
         {pathname === "/" ? "User" : "Home"}
       </A>
-      <a
+      <A
+        target="_self"
         class="flex items-center gap-2 hover:underline hover:underline-offset-4"
-        href={"/admin"}
-        target="_blank"
+        href="/admin"
         rel="noopener noreferrer"
       >
         <img
@@ -32,7 +32,7 @@ export function Footer() {
           height={16}
         />
         Admin
-      </a>
+      </A>
       <a
         class="flex items-center gap-2 hover:underline hover:underline-offset-4"
         href={"https://bknd.io"}
