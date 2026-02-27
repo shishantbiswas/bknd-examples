@@ -1,6 +1,5 @@
 import { type BkndConfig, em, entity, text, boolean, libsql } from "bknd";
 
-// Unrelated to framework adapters
 import { registerLocalMediaAdapter } from "bknd/adapter/node";
 
 const local = registerLocalMediaAdapter();
