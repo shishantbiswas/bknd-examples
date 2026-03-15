@@ -31,12 +31,21 @@ jobs:
         with:
           images: gitea.bsws.in/${{ github.repository }}
           tags: |
-            type=raw,value=tanstack-start-{{sha}},enable=${{ github.ref_name == 'main' }}
+            # 1. Unique composite tag (e.g., tanstack-start-6b31d4d)
+            # We use the 'priority' to ensure this is treated as a primary tag
+            type=raw,value=tanstack-start-{{sha}},enable=${{ github.ref_name == 'main' }},priority=1000
             
-            type=raw,value=tanstack-start,enable=${{ github.ref_name == 'main' }}
+            # 2. The stable pointer (e.g., tanstack-start)
+            type=raw,value=tanstack-start,enable=${{ github.ref_name == 'main' }},priority=900
 
-            type=ref,event=branch
+            # 3. Standard branch fallback (e.g., start)
+            type=ref,event=branch     
             
+      - name: Inspect Generated Tags
+        run: |
+          echo "The following tags will be applied:"
+          echo "${{ steps.meta.outputs.tags }}"
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
