@@ -3,7 +3,8 @@ name: Build and Push to Gitea Registry
 on:
   push:
     branches: [ "main" ]
-
+  workflow_dispatch: # This enables the manual trigger button
+  
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
