@@ -31,8 +31,8 @@ jobs:
         with:
           images: gitea.bsws.in/${{ github.repository }}
           tags: |
+            type=raw,value=tanstack-start-{{sha}},enable=${{ github.ref == 'refs/heads/start' }}
             type=raw,value=tanstack-start,enable=${{ github.ref == 'refs/heads/start' }}
-            type=sha,prefix=sha-
 
       - name: Build and push
         uses: docker/build-push-action@v6
