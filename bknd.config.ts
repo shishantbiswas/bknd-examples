@@ -1,7 +1,8 @@
-import { type BkndConfig, em, entity, text, boolean, libsql } from "bknd";
+import { em, entity, text, boolean, libsql } from "bknd";
 
-// Unrelated to framework adapters
+import type { TanstackStartConfig } from "bknd/adapter/tanstack-start";
 import { registerLocalMediaAdapter } from "bknd/adapter/node";
+import { secureRandomString } from "bknd/utils";
 
 const local = registerLocalMediaAdapter();
 
@@ -15,7 +16,7 @@ const schema = em({
 // register your schema to get automatic type completion
 type Database = (typeof schema)["DB"];
 declare module "bknd" {
-  interface DB extends Database {}
+  interface DB extends Database { }
 }
 
 export default {
@@ -33,14 +34,19 @@ export default {
 
       // and create a user
       await ctx.app.module.auth.createUser({
-        email: "dswbx@bknd.io",
+        email: "test@bknd.io",
         password: "12345678",
       });
     },
   },
   config: {
     data: schema.toJSON(),
-    auth: { enabled: true },
+    auth: {
+      enabled: true,
+      jwt: {
+        secret: secureRandomString(32),
+      }
+    },
     media: {
       enabled: true,
       adapter: local({
@@ -48,4 +54,4 @@ export default {
       }),
     },
   },
-} satisfies BkndConfig;
+} satisfies TanstackStartConfig;

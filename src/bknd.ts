@@ -1,15 +1,17 @@
-// import { getApp as getBkndApp } from "bknd/adapter/nextjs";
+import { App } from "bknd";
 import config from "../bknd.config";
-import { BkndConfig, createFrameworkApp } from "bknd/adapter";
+import { getApp as getBkndApp } from "bknd/adapter/tanstack-start";
 
-// --------------------------------- TANSTACK ADAPTER PROTOTYPE -----------------------------------
-export async function getApp<Env = NodeJS.ProcessEnv>(
-  config: BkndConfig<Env>,
-  args: Env = process.env as Env,
-) {
-  return await createFrameworkApp(config, args);
+declare global {
+  var __bknd: App | undefined
 }
-// --------------------------------- TANSTACK ADAPTER PROTOTYPE -----------------------------------
+
+const getApp = async () => {
+  if (!global.__bknd) {
+    global.__bknd = await getBkndApp(config, process.env);
+  }
+  return global.__bknd;
+}
 
 export async function getApi({
   headers,
@@ -18,9 +20,7 @@ export async function getApi({
   verify?: boolean;
   headers?: Headers;
 }) {
-  const app = await getApp(config, process.env);
-  // const app = await getBkndApp(config, process.env);
-
+  const app = await getApp();
   if (verify) {
     const api = app.getApi({ headers });
     await api.verifyAuth();
