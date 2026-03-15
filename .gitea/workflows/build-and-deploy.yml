@@ -31,9 +31,16 @@ jobs:
         with:
           images: gitea.bsws.in/${{ github.repository }}
           tags: |
-            type=raw,value=tanstack-start-{{sha}},enable=${{ github.ref == 'refs/heads/start' }}
-            type=raw,value=tanstack-start,enable=${{ github.ref == 'refs/heads/start' }}
+            # 1. The specific composite tag for the 'start' branch
+            type=raw,value=tanstack-start-{{sha}},enable=${{ github.ref_name == 'start' }}
+            
+            # 2. The 'latest' pointer for the 'start' branch
+            type=raw,value=tanstack-start,enable=${{ github.ref_name == 'start' }}
 
+            # 3. FALLBACK: Always create a tag so the build doesn't crash
+            # This will use the branch name automatically (e.g. :start)
+            type=ref,event=branch
+            
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
