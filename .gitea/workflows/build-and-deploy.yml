@@ -17,7 +17,7 @@ jobs:
         with:
           registry: gitea.bsws.in
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -31,8 +31,8 @@ jobs:
         with:
           images: gitea.bsws.in/${{ github.repository }}
           tags: |
-            type=raw,value=latest
-            type=sha
+            type=raw,value=tanstack-start,enable=${{ github.ref == 'refs/heads/start' }}
+            type=sha,prefix=sha-
 
       - name: Build and push
         uses: docker/build-push-action@v6
