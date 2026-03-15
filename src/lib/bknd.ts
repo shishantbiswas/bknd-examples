@@ -1,5 +1,5 @@
 import { App } from "bknd";
-import config from "../bknd.config";
+import config from "../../bknd.config";
 import { getApp as getBkndApp } from "bknd/adapter/tanstack-start";
 
 declare global {

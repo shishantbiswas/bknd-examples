@@ -1,4 +1,4 @@
-import { em, entity, text, boolean, libsql } from "bknd";
+import { em, entity, text, boolean, libsql, type Connection } from "bknd";
 
 import type { TanstackStartConfig } from "bknd/adapter/tanstack-start";
 import { registerLocalMediaAdapter } from "bknd/adapter/node";
@@ -19,10 +19,17 @@ declare module "bknd" {
   interface DB extends Database { }
 }
 
+function getDBConnection(): Connection | { url: ":memory:" | (string & {}) } {
+  if (process.env.NODE_ENV !== "production") return { url: ":memory:" };
+
+  return libsql({
+    url: process.env.DATABASE_URL,
+  })
+}
+
+
 export default {
-  connection: libsql({
-    url: process.env.DATABASE_URL || "http://localhost:8080",
-  }),
+  connection: getDBConnection(),
   options: {
     // the seed option is only executed if the database was empty
     seed: async (ctx) => {

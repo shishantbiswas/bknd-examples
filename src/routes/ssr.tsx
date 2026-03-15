@@ -1,5 +1,8 @@
 import { createFileRoute, useRouterState } from "@tanstack/react-router";
 import { getRequest } from "@tanstack/react-start/server";
+import { getApi } from "@/lib/bknd";
+import { createServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
 
 export const getTodo = createServerFn({ method: "POST" }).handler(async () => {
   const api = await getApi({});
@@ -23,21 +26,18 @@ export const Route = createFileRoute("/ssr")({
   },
 });
 
-import { getApi } from "@/bknd";
-import { createServerFn } from "@tanstack/react-start";
-import { Link } from "@tanstack/react-router";
 
 function RouteComponent() {
   const { todos, user } = Route.useLoaderData();
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="flex flex-row items-center ">
           <img
-            className="dark:invert size-18"
+            className="size-18"
             src="/tanstack-circle-logo.png"
-            alt="Next.js logo"
+            alt="tanstack logo"
           />
           <div className="ml-3.5 mr-2 font-mono opacity-70">&amp;</div>
           <img
@@ -157,7 +157,7 @@ function Buttons() {
   return (
     <div className="flex gap-4 items-center flex-col sm:flex-row">
       <a
-        className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 text-white hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 text-white hover:bg-[#383838] dark:hover:bg-[#ccc] dark:text-black text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
         href="https://bknd.io/"
         target="_blank"
         rel="noopener noreferrer"
@@ -173,7 +173,7 @@ function Buttons() {
       </a>
       <a
         className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-        href="https://docs.bknd.io/integration/nextjs"
+        href="https://docs.bknd.io/integration/tanstack-start"
         target="_blank"
         rel="noopener noreferrer"
       >
