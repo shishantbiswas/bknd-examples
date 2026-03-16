@@ -1,6 +1,7 @@
 import { App } from "bknd";
 import config from "../../bknd.config";
 import { getApp as getBkndApp } from "bknd/adapter/tanstack-start";
+import { env } from "cloudflare:workers";
 
 declare global {
   var __bknd: App | undefined
@@ -8,7 +9,7 @@ declare global {
 
 const getApp = async () => {
   if (!global.__bknd) {
-    global.__bknd = await getBkndApp(config, process.env);
+    global.__bknd = await getBkndApp(config(env), env);
   }
   return global.__bknd;
 }
