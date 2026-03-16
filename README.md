@@ -1,6 +1,7 @@
 # bknd + Tanstack Start Example (Bun + Cloudflare)
 
 This is a minimal example to shows how to integrate bknd with Tanstack Start for Cloudflare deployment.
+Here is a [Cloudflare Preview URL](https://tanstack-start-bknd.shishantbiswas.workers.dev)
 
 ## Setup
 
