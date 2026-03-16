@@ -5,7 +5,6 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import { fileURLToPath, URL } from "url";
 import tailwindcss from "@tailwindcss/vite";
-import { nitro } from "nitro/vite";
 import { cloudflare } from '@cloudflare/vite-plugin'
 
 const config = defineConfig({
@@ -16,13 +15,6 @@ const config = defineConfig({
     tsconfigPaths: true,
   },
   plugins: [
-    // nitro({
-    //   preset: "cloudflare_module",
-    //   cloudflare: {
-    //     deployConfig: true,
-    //     nodeCompat: true
-    //   },
-    // }),
     cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     devtools(),
