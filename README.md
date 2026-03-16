@@ -1,6 +1,6 @@
-# bknd + Tanstack Start Example
+# bknd + Tanstack Start Example (Docker)
 
-This is a minimal example to shows how to integrate bknd with Tanstack Start.
+This is a minimal example to shows how to integrate bknd with Tanstack Start for Docker deployment.
 
 ## Setup
 
@@ -53,3 +53,23 @@ bun run dev
 
 - Email: `test@bknd.io`
 - Password: `12345678`
+
+## For Building the Docker Image
+
+```bash
+docker build -t bknd-examples:tanstack-start .
+```
+
+## For Deployment on Docker (using docker compose)
+
+1. Run `docker compose up -d`
+
+## For Local Development
+
+1. Run `bun run dev`
+2. Open `http://localhost:3000`
+3. Open `http://localhost:3000/admin` for Admin Dashboard
+
+
+## For Cloudflare Workers deployment
+Checkout the `cf-tanstack` branch for Cloudflare Workers deployment instructions.
