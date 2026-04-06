@@ -1,10 +1,9 @@
 import { DB } from "bknd";
-import { Suspense } from "solid-js";
+import { For, Suspense } from "solid-js";
 import { Footer } from "~/components/Footer";
 import { List } from "~/components/List";
 import { getApi } from "~/lib/bknd";
-import { action, redirect, useAction, useSubmission } from "@solidjs/router";
-import { query, createAsync } from "@solidjs/router";
+import { action, redirect, useAction, useSubmission, query, createAsync } from "@solidjs/router";
 
 type Todo = DB['todos'];
 
@@ -86,34 +85,37 @@ export default function Home() {
                 </div>
               )}
               <div class="flex flex-col gap-3">
-                {data()?.todos?.
+                <For each={(data()?.todos ?? []).slice(0, data()?.limit ?? 0)}>
+                  {(todo) => (<div class="flex flex-row">
+                    <div class="flex flex-row flex-grow items-center gap-3 ml-1">
+                      <input
+                        type="checkbox"
+                        class="flex-shrink-0 cursor-pointer"
+                        checked={!!todo.done}
+                        onChange={async () => {
+                          await updateTodo(todo);
+                        }}
+                      />
+                      <div class="text-foreground/90 leading-none">
+                        {todo.title}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      class="cursor-pointer grayscale transition-all hover:grayscale-0 text-xs "
+                      onClick={async () => {
+                        await removeTodo(todo);
+                      }}
+                    >
+                      ❌
+                    </button>
+                  </div>)}
+                </For>
+                {/* {?.todos?.
                   splice(0, data()?.limit ?? 0)
                   .map((todo) => (
-                    <div class="flex flex-row">
-                      <div class="flex flex-row flex-grow items-center gap-3 ml-1">
-                        <input
-                          type="checkbox"
-                          class="flex-shrink-0 cursor-pointer"
-                          checked={!!todo.done}
-                          onChange={async () => {
-                            await updateTodo(todo);
-                          }}
-                        />
-                        <div class="text-foreground/90 leading-none">
-                          {todo.title}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        class="cursor-pointer grayscale transition-all hover:grayscale-0 text-xs "
-                        onClick={async () => {
-                          await removeTodo(todo);
-                        }}
-                      >
-                        ❌
-                      </button>
-                    </div>
-                  ))}
+                    
+                  ))} */}
               </div>
               <form
                 class="flex flex-row w-full gap-3 mt-2"

@@ -18,10 +18,14 @@ declare module "bknd" {
   interface DB extends Database {}
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export default {
-  connection: libsql({
-    url: process.env.DATABASE_URL || "http://localhost:8080",
-  }),
+  connection: isDev
+    ? { url: "file:data.db" }
+    : libsql({
+        url: process.env.DATABASE_URL || "http://localhost:8080",
+      }),
   options: {
     // the seed option is only executed if the database was empty
     seed: async (ctx) => {
@@ -55,6 +59,6 @@ export default {
   },
   adminOptions: {
     adminBasepath: "/admin",
-    assetsPath: "/admin/",
+    assetsPath: "/admin",
   },
 } satisfies RuntimeBkndConfig;
