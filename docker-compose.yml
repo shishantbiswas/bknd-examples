@@ -1,6 +1,8 @@
 services:
   app:
-    image: gitea.bsws.in/shishantbiswas/bknd-examples:tanstack-start
+    build:
+      context: .
+      dockerfile: Dockerfile
     deploy:
       resources:
         limits:
