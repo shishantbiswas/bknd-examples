@@ -31,6 +31,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 bkndapp
 
 COPY --from=builder --chown=bkndapp:nodejs /app/.output ./.output
+COPY --from=builder --chown=bkndapp:nodejs /app/public ./public
 USER bkndapp
 
 EXPOSE 3000
