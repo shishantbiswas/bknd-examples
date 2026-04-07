@@ -68,7 +68,7 @@ export default function Home() {
       <main class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div class="flex flex-row items-center ">
           <img
-            class="dark:invert size-18"
+            class="size-18"
             src="/solid.svg"
             alt="Solid Start logo"
           />
@@ -120,11 +120,6 @@ export default function Home() {
                     </button>
                   </div>)}
                 </For>
-                {/* {?.todos?.
-                  splice(0, data()?.limit ?? 0)
-                  .map((todo) => (
-                    
-                  ))} */}
               </div>
               <form
                 class="flex flex-row w-full gap-3 mt-2"

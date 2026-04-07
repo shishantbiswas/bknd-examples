@@ -46,7 +46,7 @@ export default function Home() {
       <main class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div class="flex flex-row items-center ">
           <img
-            class="dark:invert size-18"
+            class="size-18"
             src="/solid.svg"
             alt="Solid logo"
           />

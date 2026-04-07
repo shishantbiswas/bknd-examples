@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - VITE_SYNC_URL=${VITE_SYNC_URL}
     deploy:
       restart_policy:
         condition: on-failure

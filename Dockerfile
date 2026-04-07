@@ -13,7 +13,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG VITE_SYNC_URL
+
 ENV NODE_ENV=production
+ENV VITE_SYNC_URL=$VITE_SYNC_URL
 RUN bun run build
 
 FROM base AS runner
