@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { onMounted, onUnmounted } from 'vue';
+let socket: WebSocket;
 
 const { fetchTodos, toggleTodo, createTodo, deleteTodo } = useTodoActions();
 const { data: todos, refresh, status, pending } = await useAsyncData('todos', () => fetchTodos());
@@ -15,6 +17,19 @@ async function handleSubmit(event: Event) {
   refresh();
 };
 
+onMounted(() => {
+  socket = new WebSocket(import.meta.env.VITE_SYNC_URL);
+  socket.onmessage = (event) => {
+    const ping = JSON.parse(event.data);
+    if (ping.type === 'INVALIDATE' && ping.key === 'todos_data') {
+      refresh();
+    }
+  };
+});
+
+onUnmounted(() => socket.close());
+
+
 </script>
 
 <template>
@@ -22,14 +37,14 @@ async function handleSubmit(event: Event) {
     class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
     <main class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       <div class="flex flex-row items-center ">
-        <img class="dark:invert size-24" src="/nuxt.svg" alt="Nuxt logo" />
+        <img class="size-24" src="/nuxt.svg" alt="Nuxt logo" />
         <div class="ml-3.5 mr-2 font-mono opacity-70">&amp;</div>
         <img class="dark:invert" src="/bknd.svg" alt="bknd logo" width="183" height="59" />
       </div>
 
       <List :items="['Get started with a full backend.', 'Focus on what matters instead of repetition.']" />
 
-      <div class="flex flex-col border border-foreground/15 w-full py-4 px-5 gap-2">
+      <div class="flex flex-col border border-black/15 dark:border-white/15 w-full py-4 px-5 gap-2">
         <h2 class="font-mono mb-1 opacity-70"><code>What's next?</code></h2>
         <div class="flex flex-col w-full gap-2">
           <div v-if="todos.total > todos.limit"
@@ -45,7 +60,7 @@ async function handleSubmit(event: Event) {
                 <div class="text-foreground/90 leading-none">{{ todo.title }}</div>
               </div>
               <button type="button" class="cursor-pointer grayscale transition-all hover:grayscale-0 text-xs"
-                @click="() => { deleteTodo(todo.id); refresh() }">
+                @click="() => { deleteTodo(todo); refresh() }">
                 ❌
               </button>
             </div>
@@ -53,7 +68,7 @@ async function handleSubmit(event: Event) {
 
           <form class="flex flex-row w-full gap-3 mt-2" :key="todos.todos.map(t => t.id).join()" @submit="handleSubmit">
             <input type="text" name="title" placeholder="New todo"
-              class="py-2 px-4 flex flex-grow rounded-sm bg-foreground/10 focus:bg-foreground/20 transition-colors outline-none" />
+              class="py-2 px-4 flex flex-grow rounded-sm bg-black/5 focus:bg-black/10 dark:bg-white/5 dark:focus:bg-white/10 transition-colors outline-none" />
             <button type="submit" class="cursor-pointer">Add</button>
           </form>
         </div>

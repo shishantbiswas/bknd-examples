@@ -17,17 +17,18 @@ export const useTodoActions = () => {
       body: { action: "create", data: { title } },
     });
 
-  const deleteTodo = (id: number) =>
+  const deleteTodo = (todo: Todo) =>
     $fetch("/todos", {
       method: "POST",
-      body: { action: "delete", data: { id } },
+      body: { action: "delete", data: { id: todo.id } },
     });
 
-  const toggleTodo = (todo: any) =>
+  const toggleTodo = (todo: Todo) => {
     $fetch("/todos", {
       method: "POST",
       body: { action: "toggle", data: todo },
     });
+  }
 
   return { fetchTodos, createTodo, deleteTodo, toggleTodo };
 };

@@ -1,6 +1,8 @@
-import { em, entity, text, boolean, libsql } from "bknd";
+import { em, entity, text, boolean, libsql, DatabaseEvents } from "bknd";
 import { type RuntimeBkndConfig } from "bknd/adapter";
+// import { d1, d1Sqlite } from "bknd/adapter/cloudflare";
 import { registerLocalMediaAdapter } from "bknd/adapter/node";
+import { redis } from './server/utils/redis'
 
 const local = registerLocalMediaAdapter();
 
@@ -14,13 +16,17 @@ const schema = em({
 // register your schema to get automatic type completion
 type Database = (typeof schema)["DB"];
 declare module "bknd" {
-  interface DB extends Database {}
+  interface DB extends Database { }
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export default {
-  connection: libsql({
-    url: process.env.DATABASE_URL || "http://localhost:8080",
-  }),
+  connection: isDev
+    ? { url: "file:data.db" }
+    : libsql({
+      url: process.env.DATABASE_URL || "http://localhost:8080",
+    }),
   options: {
     // the seed option is only executed if the database was empty
     seed: async (ctx) => {
@@ -51,6 +57,28 @@ export default {
         path: "./public/uploads",
       }),
     },
+  },
+  async onBuilt(app) {
+    const cache = await redis()
+    app.emgr.onEvent(DatabaseEvents.MutatorDeleteAfter, async (event) => {
+      // console.log("MutatorDeleteAfter received", event.params.entity.name);
+      if (event.params.entity.name === "todos") {
+        await cache.publish('db_invalidation', 'todos_data');
+      }
+    });
+    app.emgr.onEvent(DatabaseEvents.MutatorInsertAfter, async (event) => {
+      // console.log("MutatorInsertAfter received", event.params);
+      if (event.params.entity.name === "todos") {
+        await cache.publish('db_invalidation', 'todos_data');
+      }
+    });
+
+    app.emgr.onEvent(DatabaseEvents.MutatorUpdateAfter, async (event) => {
+      // console.log("MutatorUpdateAfter received", event.params);
+      if (event.params.entity.name === "todos") {
+        await cache.publish('db_invalidation', 'todos_data');
+      }
+    });
   },
   adminOptions: {
     adminBasepath: "/admin",

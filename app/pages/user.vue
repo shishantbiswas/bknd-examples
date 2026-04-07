@@ -12,12 +12,12 @@ const { data, status: userStatus } = await useAsyncData('user', () => getUser())
 
     <main className="flex flex-col gap-8 row-start-2 justify-center items-center sm:items-start">
       <div class="flex flex-row items-center ">
-        <img class="dark:invert size-24" src="/nuxt.svg" alt="Nuxt logo" />
+        <img class="size-24" src="/nuxt.svg" alt="Nuxt logo" />
         <div class="ml-3.5 mr-2 font-mono opacity-70">&amp;</div>
         <img class="dark:invert" src="/bknd.svg" alt="bknd logo" width="183" height="59" />
       </div>
       <div v-if="data?.user">
-        Logged in as {{ data.user.email }}.
+        Logged in as {{ data?.user.email }}.
         <a className="font-medium underline" href='/api/auth/logout'>
           Logout
         </a>
