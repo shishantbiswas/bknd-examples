@@ -7,9 +7,9 @@ const app = new Hono();
 const activeClients = new Set<any>();
 
 await redisSubscriber.subscribe('db_invalidation', (message) => {
-  const payload = JSON.stringify({ 
-    type: 'INVALIDATE', 
-    key: message 
+  const payload = JSON.stringify({
+    type: 'INVALIDATE',
+    key: message
   });
 
   activeClients.forEach((ws) => {
@@ -20,6 +20,8 @@ await redisSubscriber.subscribe('db_invalidation', (message) => {
     }
   });
 });
+
+app.get("/", (c) => c.text("daijoubu"));
 
 app.get(
   '/ws',
