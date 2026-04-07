@@ -8,12 +8,14 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-    expose:
-      - 3000
+    ports:
+      - 3000:3000
     environment:
       DATABASE_URL: http://db:8080
+      REDIS_URL: redis://redis:6379
     depends_on:
       - db
+      - redis
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 15s
@@ -21,8 +23,33 @@ services:
       retries: 3
   db:
     image: ghcr.io/tursodatabase/libsql-server
+    expose:
+      - 8080
     volumes:
       - libsql:/var/lib/sqld
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "timeout 1s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: 'redis:8-alpine'
+    restart: unless-stopped
+    volumes:
+      - 'bknd_redis_data:/data'
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 15s
+      timeout: 5s
+      retries: 3
 
 volumes:
   libsql:
+  bknd_redis_data:

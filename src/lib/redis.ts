@@ -7,7 +7,7 @@ export const redis = await createClient({
   url: url,
   socket: {
     tls: true,
-    servername,
+    servername, // remove this if not required
     connectTimeout: 10000,
   }
 }).connect();
