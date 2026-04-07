@@ -2,7 +2,7 @@
   "name": "example-basic",
   "type": "module",
   "scripts": {
-    "postinstall": "bknd copy-assets --out public/admin",
+    "prebuild": "bknd copy-assets --out public/admin",
     "dev": "vite dev",
     "build": "vite build",
     "start": "vite start",
