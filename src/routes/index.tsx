@@ -3,7 +3,7 @@ import { For, Suspense } from "solid-js";
 import { Footer } from "~/components/Footer";
 import { List } from "~/components/List";
 import { getApi } from "~/lib/bknd";
-import { action, redirect, useAction, useSubmission, query, createAsync } from "@solidjs/router";
+import { action, redirect, useAction, useSubmission, query, createAsync, revalidate } from "@solidjs/router";
 
 type Todo = DB['todos'];
 
@@ -24,7 +24,7 @@ const createTodo = action(async (formData: FormData) => {
   const title = formData.get("title") as string;
   const api = await getApi({});
   await api.data.createOne("todos", { title });
-  throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
+  // throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
 }, "createTodo");
 
 
@@ -35,7 +35,7 @@ const completeTodo = action(async (todo: Todo) => {
   await api.data.updateOne("todos", todo.id, {
     done: !todo.done,
   });
-  throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
+  // throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
 }, "completeTodo");
 
 
@@ -43,7 +43,7 @@ const deleteTodo = action(async (todo: Todo) => {
   "use server"
   const api = await getApi({});
   await api.data.deleteOne("todos", todo.id);
-  throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
+  // throw redirect("/", { revalidate: getTodosFromServer.keyFor() });
 }, "deleteTodo");
 
 export default function Home() {
@@ -53,6 +53,15 @@ export default function Home() {
 
   const updateTodo = useAction(completeTodo);
   const removeTodo = useAction(deleteTodo);
+
+  const ws = new WebSocket(import.meta.env.VITE_SYNC_URL);
+  ws.onmessage = (event) => {
+    const ping = JSON.parse(event.data);
+    // console.log("client data = ",ping)
+    if (ping.type === 'INVALIDATE' && ping.key === 'todos_data') {
+      revalidate(getTodosFromServer.keyFor()); // Automatically triggers the HTTP call to get fresh data
+    }
+  };
 
   return (
     <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
