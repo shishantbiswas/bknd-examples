@@ -1,0 +1,18 @@
+{
+  "name": "sync",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "start": "bun --bun hono.ts",
+    "dev": "bun --bun --hot hono.ts"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "hono": "^4.12.11",
+    "redis": "^5.11.0"
+  }
+}
